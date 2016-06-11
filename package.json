@@ -1,8 +1,8 @@
 {
   "name": "wheel-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "仿 iOS UIPickerView 的滚动选择器",
-  "main": "build/wheelpicker.js",
+  "main": "dist/wheelpicker.js",
   "keywords": [
     "UIPickerView",
     "滚动选择"
