@@ -8,6 +8,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="wheelpicker.min.css" media="screen">
   </head>
   <body>
     <section class="page-header">
@@ -27,7 +28,14 @@
 <h2>
 <a id="演示" class="anchor" href="#%E6%BC%94%E7%A4%BA" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>演示</h2>
 
-<p><a href="http://cople.github.io/WheelPicker">DEMO</a></p>
+    <h3>单列</h3>
+    <p><a href="javascript:;" id="demo1">显示</a></p>
+
+    <h3><label for="demo2">两列带默认值</label></h3>
+    <p><input type="text" id="demo2"></p>
+
+    <h3><label for="demo3">联动</label></h3>
+    <p><input type="text" id="demo3"></p>
 
 <h2>
 <a id="安装" class="anchor" href="#%E5%AE%89%E8%A3%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装</h2>
@@ -228,6 +236,76 @@
 
     </section>
 
-  
+<script src="wheelpicker.min.js"></script>
+<script>
+var frutis = "西瓜,柠檬,草莓,荔枝,橘子,菠萝,香蕉,柚子,苹果,龙眼,蓝莓,樱桃,椰子,杨梅".split(",");
+var frutiData = frutis.map(function(fruit){
+  return {
+    text: fruit,
+    value: fruit
+  };
+});
+var vegetables = "香菜,青菜,芦笋,萝卜,水芹,黄瓜,冬瓜,番茄,茄子,土豆,蘑菇,木耳,紫菜,海带".split(",");
+var vegetableData = vegetables.map(function(vegetable){
+  return {
+    text: vegetable,
+    value: vegetable
+  };
+});
+
+var picker1 = new WheelPicker({
+  title: "单列选择器",
+  data: [frutis],
+  onSelect: function(value){
+    alert(value);
+  }
+});
+
+document.getElementById("demo1").onclick = function(){
+  picker1.show();
+  return false;
+};
+
+var picker2 = new WheelPicker({
+  el: "#demo2",
+  value: ["柠檬", "萝卜"],
+  data: [frutiData, vegetableData]
+});
+
+var picker3 = new WheelPicker({
+  el: "#demo3",
+  hideOnBackdrop: true,
+  data: [["水果", "蔬菜"], frutiData],
+  onChange: function(value, index){
+    console.log("onChange", value, index);
+
+    if (index === 0) {
+      this.setData(value == "水果" ? frutiData : vegetableData, 1);
+    }
+  },
+  onSelect: function(value){
+    console.log("onSelect", value);
+  },
+  onShow: function(){
+    console.log("onShow");
+  },
+  onCancel: function(){
+    console.log("onCancel");
+  },
+  parseValue: function(value) {
+    return value[0] + "：" + value[1];
+  }
+});
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46659645-6', 'auto');
+  ga('send', 'pageview');
+</script>
   </body>
 </html>
