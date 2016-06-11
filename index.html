@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>WheelPicker by Cople</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">WheelPicker</h1>
+      <h2 class="project-tagline">仿 iOS UIPickerView 的滚动选择器</h2>
+      <a href="https://github.com/Cople/WheelPicker" class="btn">View on GitHub</a>
+      <a href="https://github.com/Cople/WheelPicker/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Cople/WheelPicker/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="wheelpicker" class="anchor" href="#wheelpicker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>WheelPicker</h1>
+
+<p>仿 iOS UIPickerView 的滚动选择器</p>
+
+<h2>
+<a id="演示" class="anchor" href="#%E6%BC%94%E7%A4%BA" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>演示</h2>
+
+<p><a href="http://cople.github.io/WheelPicker">DEMO</a></p>
+
+<h2>
+<a id="安装" class="anchor" href="#%E5%AE%89%E8%A3%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装</h2>
+
+<div class="highlight highlight-source-shell"><pre>npm install wheel-picker --save</pre></div>
+
+<h2>
+<a id="使用" class="anchor" href="#%E4%BD%BF%E7%94%A8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>使用</h2>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> frutis <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>草莓<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>柠檬<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>菠萝<span class="pl-pds">"</span></span>];
+<span class="pl-k">var</span> vegetables <span class="pl-k">=</span> [{
+    text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>番茄<span class="pl-pds">"</span></span>,
+    value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>tomato<span class="pl-pds">"</span></span>
+}, {
+    text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>蘑菇<span class="pl-pds">"</span></span>,
+    value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>mushroom<span class="pl-pds">"</span></span>
+}, {
+    text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>土豆<span class="pl-pds">"</span></span>,
+    value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>potato<span class="pl-pds">"</span></span>
+}];
+
+<span class="pl-k">var</span> picker1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">WheelPicker</span>({
+    title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>最爱的水果<span class="pl-pds">"</span></span>,
+    data<span class="pl-k">:</span> [frutis],
+    <span class="pl-en">onSelect</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">value</span>) {
+        <span class="pl-en">alert</span>(<span class="pl-s"><span class="pl-pds">"</span>你选择的是：<span class="pl-pds">"</span></span> <span class="pl-k">+</span>  value[<span class="pl-c1">0</span>]);
+    }
+});
+
+<span class="pl-k">var</span> picker2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">WheelPicker</span>({
+    title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>最爱的水果和蔬菜<span class="pl-pds">"</span></span>,
+    el<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>#demo<span class="pl-pds">"</span></span>,
+    data<span class="pl-k">:</span> [frutis, vegetables],
+    value<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">"</span>柠檬<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>potato<span class="pl-pds">"</span></span>],
+    <span class="pl-en">parseValue</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">value</span>) {
+        <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>你选择的分别是：<span class="pl-pds">"</span></span> <span class="pl-k">+</span>  <span class="pl-smi">value</span>.<span class="pl-c1">join</span>(<span class="pl-s"><span class="pl-pds">"</span>、<span class="pl-pds">"</span></span>);
+    }
+});</pre></div>
+
+<h2>
+<a id="选项" class="anchor" href="#%E9%80%89%E9%A1%B9" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>选项</h2>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>null</td>
+<td>标题</td>
+</tr>
+<tr>
+<td>el</td>
+<td>element</td>
+<td>null</td>
+<td>选择器对应的 input 元素</td>
+</tr>
+<tr>
+<td>hideOnBackdrop</td>
+<td>boolean</td>
+<td>false</td>
+<td>点击遮罩层关闭组件（相当于取消）</td>
+</tr>
+<tr>
+<td>data</td>
+<td>array</td>
+<td>[]</td>
+<td>每列的数据组成的数组</td>
+</tr>
+<tr>
+<td>value</td>
+<td>array</td>
+<td>[]</td>
+<td>每列的默认值组成的数组</td>
+</tr>
+<tr>
+<td>rows</td>
+<td>number</td>
+<td>5</td>
+<td>可见的行数（奇数）</td>
+</tr>
+<tr>
+<td>rowHeight</td>
+<td>number</td>
+<td>34</td>
+<td>行高</td>
+</tr>
+<tr>
+<td>parseValue</td>
+<td>function</td>
+<td><code>val =&gt; val.join(" ")</code></td>
+<td>保存时填充到 el 元素的值</td>
+</tr>
+<tr>
+<td>onRender</td>
+<td>function</td>
+<td>null</td>
+<td>生成组件 DOM 时触发，参数为组件元素</td>
+</tr>
+<tr>
+<td>onShow</td>
+<td>function</td>
+<td>null</td>
+<td>显示组件时触发</td>
+</tr>
+<tr>
+<td>onChange</td>
+<td>function</td>
+<td>null</td>
+<td>滚动导致值变化时触发，参数为选中值和该列的索引值</td>
+</tr>
+<tr>
+<td>onSelect</td>
+<td>function</td>
+<td>null</td>
+<td>点击确定时触发，参数为值数组</td>
+</tr>
+<tr>
+<td>onCancel</td>
+<td>function</td>
+<td>null</td>
+<td>点击取消时触发</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="方法" class="anchor" href="#%E6%96%B9%E6%B3%95" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法</h2>
+
+<h3>
+<a id="pickergetvalindexnumber" class="anchor" href="#pickergetvalindexnumber" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.getVal([index:number])</h3>
+
+<p>返回值数组或指定列的值</p>
+
+<h3>
+<a id="pickersetvalvaluearray" class="anchor" href="#pickersetvalvaluearray" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.setVal(value:array)</h3>
+
+<h3>
+<a id="pickersetvalvaluestring-indexnumber" class="anchor" href="#pickersetvalvaluestring-indexnumber" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.setVal(value:string, index:number)</h3>
+
+<p>设置各列的值或指定列的值</p>
+
+<h3>
+<a id="pickergetdataindexnubmer" class="anchor" href="#pickergetdataindexnubmer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.getData([index:nubmer])</h3>
+
+<p>返回数据数组或指定列的数据</p>
+
+<h3>
+<a id="pickersetdatadataarray--valuearray" class="anchor" href="#pickersetdatadataarray--valuearray" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.setData(data:array [, value:array])</h3>
+
+<h3>
+<a id="pickersetdatadataarray-indexnumber--valuestring" class="anchor" href="#pickersetdatadataarray-indexnumber--valuestring" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.setData(data:array, index:number [, value:string])</h3>
+
+<p>设置各列或指定列的数据和值</p>
+
+<h3>
+<a id="pickershow" class="anchor" href="#pickershow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.show()</h3>
+
+<p>显示组件</p>
+
+<h3>
+<a id="pickerhide" class="anchor" href="#pickerhide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.hide()</h3>
+
+<p>隐藏组件</p>
+
+<h3>
+<a id="pickerenable" class="anchor" href="#pickerenable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.enable()</h3>
+
+<p>启用组件</p>
+
+<h3>
+<a id="pickerdisable" class="anchor" href="#pickerdisable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.disable()</h3>
+
+<p>禁用组件</p>
+
+<h3>
+<a id="pickerdestory" class="anchor" href="#pickerdestory" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.destory()</h3>
+
+<p>销毁组件</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="http://opensource.org/licenses/MIT">MIT</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Cople/WheelPicker">WheelPicker</a> is maintained by <a href="https://github.com/Cople">Cople</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
