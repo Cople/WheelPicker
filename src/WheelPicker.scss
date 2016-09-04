@@ -7,15 +7,15 @@
     display: none;
     z-index: 77;
 
-    .wheelpicker-backdrop {
+    &-backdrop {
         transform: translateZ(0);
         transition: .4s;
         height: 100%;
         background: rgba(#000, 0.5);
         opacity: 0;
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
-    .wheelpicker-panel {
+    &-panel {
         transition: .4s;
         transform: translate3d(0, 100%, 0);
         position: absolute;
@@ -27,7 +27,7 @@
         color: #000;
         user-select: none;
     }
-    .wheelpicker-actions {
+    &-actions {
         overflow: hidden;
         border-bottom: 1px solid #C6C6C6;
         button {
@@ -38,80 +38,80 @@
             padding: 0 1em;
             height: 44px;
         }
-        .cancel {
+        .btn-cancel {
             float: left;
         }
-        .set {
+        .btn-set {
             float: right;
             color: #1078FC;
             font-weight: bold;
         }
     }
-    .wheelpicker-title {
+    &-title {
         text-align: center;
         font-size: 1em;
         line-height: 44px;
         margin: 0;
     }
-    .wheelpicker-main {
+    &-main {
         position: relative;
         background: #fff;
     }
-    .wheelpicker-wheels {
+    &-wheels {
         display: flex;
         justify-content: center;
     }
-    .wheelpicker-wheel {
+    &-wheel {
         flex: 1 auto;
         position: relative;
         overflow: hidden;
     }
-    .wheelpicker-wheel-scroller {
+    &-wheel-scroller {
         overflow: hidden;
         margin: 0;
         padding: 0;
         list-style: none;
     }
-    .wheelpicker-item {
+    &-item {
         cursor: pointer;
         line-height: 34px;
         text-align: center;
     }
-    .wheelpicker-item-disabled {
+    &-item-disabled {
         cursor: default;
         cursor: not-allowed;
         pointer-events: none;
         opacity: 0.5;
     }
-    .wheelpicker-item-selected {
+    &-item-selected {
         cursor: default;
     }
-    .wheelpicker-mask {
+    &-mask {
         position: absolute;
         left: 0;
         width: 100%;
         pointer-events: none;
         transform: translateZ(0);
     }
-    .wheelpicker-mask-top {
+    &-mask-top {
         top: 0;
         height: 50%;
         background: linear-gradient(to bottom, #FFF, rgba(#FFF, 0.5) 75%);
     }
-    .wheelpicker-mask-btm {
+    &-mask-btm {
         bottom: 0;
         height: 50%;
         background: linear-gradient(to top, #FFF, rgba(#FFF, 0.5) 75%);
     }
-    .wheelpicker-mask-current {
+    &-mask-current {
         height: 34px;
         top: 50%;
         margin-top: -18px;
         border-top: 1px solid #C6C6C6;
         border-bottom: 1px solid #C6C6C6;
     }
-    
-    &.show {
+
+    &.shown {
         .wheelpicker-backdrop {
             opacity: 1;
         }

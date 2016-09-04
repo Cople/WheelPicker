@@ -57,14 +57,14 @@ WheelPicker.prototype = {
         this.container.querySelector(".wheelpicker-mask-top").style.height = this.container.querySelector(".wheelpicker-mask-btm").style.height = this.options.rowHeight * Math.floor(this.options.rows / 2) - 1 + "px";
 
         this._bindEvents();
-        this._set(true);
+        if (this.options.value) this._set(true);
     },
 
     _createDom: function() {
         this.container = document.createElement("div");
         this.container.className = "wheelpicker";
         if (this.options.id) this.container.id = "wheelpicker-" + this.options.id;
-        this.container.innerHTML = "<div class='wheelpicker-backdrop'></div><div class='wheelpicker-panel'><div class='wheelpicker-actions'><button type='button' class='cancel'>取消</button><button type='button' class='set'>确定</button><h4 class='wheelpicker-title'></h4></div><div class='wheelpicker-main'><div class='wheelpicker-wheels'></div><div class='wheelpicker-mask wheelpicker-mask-top'></div><div class='wheelpicker-mask wheelpicker-mask-current'></div><div class='wheelpicker-mask wheelpicker-mask-btm'></div></div></div>";
+        this.container.innerHTML = "<div class='wheelpicker-backdrop'></div><div class='wheelpicker-panel'><div class='wheelpicker-actions'><button type='button' class='btn-cancel'>取消</button><button type='button' class='btn-set'>确定</button><h4 class='wheelpicker-title'></h4></div><div class='wheelpicker-main'><div class='wheelpicker-wheels'></div><div class='wheelpicker-mask wheelpicker-mask-top'></div><div class='wheelpicker-mask wheelpicker-mask-current'></div><div class='wheelpicker-mask wheelpicker-mask-btm'></div></div></div>";
         this.wheelsContainer = this.container.querySelector(".wheelpicker-wheels");
 
         if (this.options.onRender) this.options.onRender.call(this, this.container);
@@ -76,8 +76,8 @@ WheelPicker.prototype = {
         if (this.input) this.input.addEventListener("focus", this.show.bind(this));
         if (this.options.hideOnBackdrop) this.container.querySelector(".wheelpicker-backdrop").addEventListener("click", this._cancel.bind(this));
 
-        this.container.querySelector(".wheelpicker-actions .cancel").addEventListener("click", this._cancel.bind(this));
-        this.container.querySelector(".wheelpicker-actions .set").addEventListener("click", this._set.bind(this));
+        this.container.querySelector(".wheelpicker-actions .btn-cancel").addEventListener("click", this._cancel.bind(this));
+        this.container.querySelector(".wheelpicker-actions .btn-set").addEventListener("click", this._set.bind(this));
 
         this.container.querySelector(".wheelpicker-backdrop").addEventListener(this.transitionendName, this._backdropTransEnd.bind(this));
     },
@@ -87,7 +87,7 @@ WheelPicker.prototype = {
     },
 
     _backdropTransEnd: function() {
-        if (!this.container.classList.contains("show")) {
+        if (!this.container.classList.contains("shown")) {
             this.container.style.display = "none";
             this.closed = true;
 
@@ -107,7 +107,7 @@ WheelPicker.prototype = {
         }
         if (silent === true) return;
         if (this.options.onSelect) this.options.onSelect.call(this, this.getVal());
-        this.container.classList.remove("show");
+        this.container.classList.remove("shown");
     },
 
     _cancel: function() {
@@ -115,7 +115,7 @@ WheelPicker.prototype = {
             this.restore = true;
         }
         if (this.options.onCancel) this.options.onCancel.call(this);
-        this.container.classList.remove("show");
+        this.container.classList.remove("shown");
     },
 
     show: function() {
@@ -128,7 +128,7 @@ WheelPicker.prototype = {
 
         container.style.display = "block";
         setTimeout(function() {
-            container.classList.add("show");
+            container.classList.add("shown");
         }, 10);
 
         if (this.options.onShow) this.options.onShow.call(this);
