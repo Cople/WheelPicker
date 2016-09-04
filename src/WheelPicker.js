@@ -96,21 +96,23 @@ WheelPicker.prototype = {
                     wheel.setData(this._tempData[idx]);
                 }, this);
             }
-            this.setVal(this.value, null);
+            this.setVal(this.value);
         }
     },
 
     _set: function(silent) {
         this.value = this.getVal();
-        if (this.input) {
+        if (this.input && !this.cancelled) {
             this.input.value = this.options.parseValue(this.value);
         }
+        this.cancelled = false;
         if (silent === true) return;
         if (this.options.onSelect) this.options.onSelect.call(this, this.getVal());
         this.container.classList.remove("shown");
     },
 
     _cancel: function() {
+        this.cancelled = true;
         if (this.changed) {
             this.restore = true;
         }
