@@ -84,7 +84,7 @@ var picker3 = new WheelPicker({
 		console.log("onChange", value, index);
 
 		if (index === 0) {
-			this.setData(value == "水果" ? frutiData : vegetableData, 1);
+			this.setData(value[index] == "水果" ? frutiData : vegetableData, 1);
 		}
 	},
 	onSelect: function(value){

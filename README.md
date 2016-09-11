@@ -60,7 +60,7 @@ var picker2 = new WheelPicker({
 | parseValue | function | `val => val.join(" ")` | 保存时填充到 el 元素的值 |
 | onRender | function | null | 生成组件 DOM 时触发，参数为组件元素 |
 | onShow | function | null | 显示组件时触发 |
-| onChange | function | null | 滚动导致值变化时触发，参数为选中值和该列的索引值 |
+| onChange | function | null | 滚动导致值变化时触发，参数为值数组和发生变化的列的索引值 |
 | onSelect | function | null | 点击确定时触发，参数为值数组 |
 | onCancel | function | null | 点击取消时触发 |
 

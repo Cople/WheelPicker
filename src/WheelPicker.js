@@ -82,8 +82,8 @@ WheelPicker.prototype = {
         this.container.querySelector(".wheelpicker-backdrop").addEventListener(this.transitionendName, this._backdropTransEnd.bind(this));
     },
 
-    _onChange: function(index, value) {
-        if (this.options.onChange) this.options.onChange.call(this, value.value, index);
+    _onChange: function(index) {
+        if (this.options.onChange) this.options.onChange.call(this, this.getVal(), index);
     },
 
     _backdropTransEnd: function() {
