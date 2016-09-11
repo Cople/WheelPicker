@@ -10,14 +10,37 @@ function WheelPicker(options) {
         data: [],
         rows: 5,
         rowHeight: 34,
+        hiddenInput: false,
         parseValue: function(value) {
+            return value.split(" ");
+        },
+        formatValue: function(value) {
+            return value.join(" ");
+        },
+        formatHiddenValue: function(value) {
             return value.join(" ");
         }
     }, options);
 
     if (this.options.el) {
-        this.input = typeof this.options.el === "string" ? document.querySelector(this.options.el) : this.options.el;
-        this.input.setAttribute("readonly", true);
+        var el = typeof this.options.el === "string" ? document.querySelector(this.options.el) : this.options.el;
+        el.readOnly = true;
+
+        if (this.options.hiddenInput) {
+            var dummyInput = el.cloneNode();
+            dummyInput.classList.add("wheelpicker-control");
+            dummyInput.removeAttribute("id");
+            dummyInput.removeAttribute("name");
+            this.control = dummyInput;
+            this.elType = el.type;
+            el.type = "hidden";
+            el.classList.add("wheelpicker-hiddeninput");
+            el.parentNode.insertBefore(this.control, el);
+            this.hiddenInput = el;
+        } else {
+            el.classList.add("wheelpicker-control");
+            this.control = el;
+        }
     }
 
     this.value = [];
@@ -41,6 +64,8 @@ function WheelPicker(options) {
 
 WheelPicker.prototype = {
     _init: function() {
+        var defaultValue = this.options.value || (this.control && this.control.value ? this.options.parseValue(this.control.value) : null);
+
         this._createDom();
 
         for (var i = 0, len = this.options.data.length; i < len; i++) {
@@ -48,7 +73,7 @@ WheelPicker.prototype = {
                 rows: this.options.rows,
                 rowHeight: this.options.rowHeight,
                 data: this.options.data[i],
-                value: this.options.value ? this.options.value[i] : null,
+                value: defaultValue ? defaultValue[i] : null,
                 onSelect: this._onChange.bind(this, i)
             }));
         }
@@ -57,7 +82,7 @@ WheelPicker.prototype = {
         this.container.querySelector(".wheelpicker-mask-top").style.height = this.container.querySelector(".wheelpicker-mask-btm").style.height = this.options.rowHeight * Math.floor(this.options.rows / 2) - 1 + "px";
 
         this._bindEvents();
-        if (this.options.value) this._set(true);
+        if (defaultValue) this._set(true);
     },
 
     _createDom: function() {
@@ -73,7 +98,7 @@ WheelPicker.prototype = {
     },
 
     _bindEvents: function() {
-        if (this.input) this.input.addEventListener("focus", this.show.bind(this));
+        if (this.control) this.control.addEventListener("focus", this.show.bind(this));
         if (this.options.hideOnBackdrop) this.container.querySelector(".wheelpicker-backdrop").addEventListener("click", this._cancel.bind(this));
 
         this.container.querySelector(".wheelpicker-actions .btn-cancel").addEventListener("click", this._cancel.bind(this));
@@ -83,7 +108,7 @@ WheelPicker.prototype = {
     },
 
     _onChange: function(index) {
-        if (this.options.onChange) this.options.onChange.call(this, this.getVal(), index);
+        if (this.options.onChange) this.options.onChange.call(this, this.getSelectedItems(), index);
     },
 
     _backdropTransEnd: function() {
@@ -96,18 +121,26 @@ WheelPicker.prototype = {
                     wheel.setData(this._tempData[idx]);
                 }, this);
             }
-            this.setVal(this.value);
+            this.setValue(this.value);
         }
     },
 
     _set: function(silent) {
-        this.value = this.getVal();
-        if (this.input && !this.cancelled) {
-            this.input.value = this.options.parseValue(this.value);
+        var selectedItems = this.getSelectedItems();
+        this.value = this.getValue();
+        if (this.control && !this.cancelled) {
+            this.control.value = this.options.formatValue(selectedItems.map(function(item) {
+                return item.text;
+            }));
+            if (this.hiddenInput) {
+                this.hiddenInput.value = this.options.formatHiddenValue(selectedItems.map(function(item) {
+                    return item.value;
+                }));
+            }
         }
         this.cancelled = false;
         if (silent === true) return;
-        if (this.options.onSelect) this.options.onSelect.call(this, this.getVal());
+        if (this.options.onSelect) this.options.onSelect.call(this, selectedItems);
         this.container.classList.remove("shown");
     },
 
@@ -142,26 +175,32 @@ WheelPicker.prototype = {
         this._cancel();
     },
 
-    getVal: function(index) {
+    getSelectedItems: function() {
+        return this.wheels.map(function(wheel) {
+            return wheel.getSelectedItem();
+        });
+    },
+
+    getValue: function(index) {
         if (typeof index === "number") {
-            return this.wheels[index].getVal();
+            return this.wheels[index].getValue();
         } else {
             return this.wheels.map(function(wheel) {
-                return wheel.getVal();
+                return wheel.getValue();
             });
         }
     },
 
-    setVal: function(value, index) {
+    setValue: function(value, index) {
         if (this.disabled) return;
 
         var noAnimation = this.closed;
 
         if (typeof index === "number") {
-            this.wheels[index].setVal(value, noAnimation);
+            this.wheels[index].setValue(value, noAnimation);
         } else {
             this.wheels.forEach(function(wheel, idx) {
-                wheel.setVal(value[idx], noAnimation);
+                wheel.setValue(value[idx], noAnimation);
             });
         }
 
@@ -206,7 +245,15 @@ WheelPicker.prototype = {
     destory: function() {
         this.disable();
         this.container.parentNode.removeChild(this.container);
-        if (this.input) this.input.removeAttribute("readonly");
+
+        if (this.hiddenInput) {
+            this.control.parentNode.removeChild(this.control);
+            this.hiddenInput.readOnly = false;
+            this.hiddenInput.type = this.elType;
+            this.hiddenInput.classList.remove("wheelpicker-hiddeninput");
+        } else if (this.control) {
+            this.control.classList.remove("wheelpicker-control");
+        }
     }
 };
 

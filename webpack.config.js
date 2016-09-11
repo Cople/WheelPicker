@@ -1,9 +1,15 @@
-var autoprefixer = require('autoprefixer');
+var webpack = require("webpack");
+var autoprefixer = require("autoprefixer");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+var pkg = require("./package.json");
+var banner = `WheelPicker v${pkg.version}
+${pkg.homepage}
+Licensed under the ${pkg.license} License`;
 
 module.exports = {
     entry: {
-        "wheelpicker": "./src/WheelPicker.js"
+        wheelpicker: "./src/WheelPicker.js"
     },
     output: {
         path: __dirname + "/dist",
@@ -18,7 +24,8 @@ module.exports = {
         }]
     },
     plugins: [
-        new ExtractTextPlugin("[name].min.css")
+        new ExtractTextPlugin("[name].min.css"),
+        new webpack.BannerPlugin(banner, { entryOnly: true })
     ],
     postcss: function () {
         return [autoprefixer];

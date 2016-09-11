@@ -305,11 +305,15 @@ Wheel.prototype = {
         this.maxScrollY = -this.options.rowHeight * (this.data.length - 1);
     },
 
-    getVal: function() {
-        return this.data[this.selectedIndex].value;
+    getSelectedItem: function() {
+        return this.data[this.selectedIndex];
     },
 
-    setVal: function(value, noAnimation) {
+    getValue: function() {
+        return this.getSelectedItem().value;
+    },
+
+    setValue: function(value, noAnimation) {
         var index;
         var item;
 

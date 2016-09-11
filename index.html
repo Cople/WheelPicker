@@ -36,69 +36,75 @@
 
 	<div class="div">
 		<h3><label for="demo3">联动</label></h3>
-		<input type="text" id="demo3" placeholder="点击选择">
+		<input type="text" id="demo3" placeholder="点击选择" value="蔬菜 tomato">
 	</div>
 </form>
 
 <script src="./dist/wheelpicker.min.js"></script>
 <script>
-var frutis = "西瓜,柠檬,草莓,荔枝,橘子,菠萝,香蕉,柚子,苹果,龙眼,蓝莓,樱桃,椰子,杨梅".split(",");
-var frutiData = frutis.map(function(fruit){
-	return {
-		text: fruit,
-		value: fruit
-	};
+var frutis = "西瓜,柠檬,草莓,荔枝,橘子,菠萝,香蕉,柚子,苹果,龙眼".split(",");
+var frutisEn = "watermelon,lemon,strawberry,litchi,orange,pineapple,banana,grapefruit,apple,longan".split(",");
+var frutiData = frutis.map(function(name, idx) {
+    return {
+        text: name,
+        value: frutisEn[idx]
+    };
 });
-var vegetables = "香菜,青菜,芦笋,萝卜,水芹,黄瓜,冬瓜,番茄,茄子,土豆,蘑菇,木耳,紫菜,海带".split(",");
-var vegetableData = vegetables.map(function(vegetable){
-	return {
-		text: vegetable,
-		value: vegetable
-	};
+var vegetables = "香菜,青菜,芦笋,萝卜,水芹,黄瓜,冬瓜,番茄,茄子,土豆".split(",");
+var vegetablesEn = "parsley,celery,asparagus,carrot,celery,cucumber,melon,tomato,eggplant,potato".split(",");
+var vegetableData = vegetables.map(function(name, idx) {
+    return {
+        text: name,
+        value: vegetablesEn[idx]
+    };
 });
 
 var picker1 = new WheelPicker({
-	title: "单列选择器",
-	data: [frutis],
-	onSelect: function(value){
-		alert(value);
-	}
+    title: "单列选择器",
+    data: [frutis],
+    onSelect: function(selected) {
+        alert(selected[0].value);
+    }
 });
 
-document.getElementById("demo1").onclick = function(){
-	picker1.show();
-	return false;
+document.getElementById("demo1").onclick = function() {
+    picker1.show();
+    return false;
 };
 
 var picker2 = new WheelPicker({
-	el: "#demo2",
-	value: ["柠檬", "萝卜"],
-	data: [frutiData, vegetableData]
+    el: "#demo2",
+    data: [frutiData, vegetableData],
+    value: ["lemon", "carrot"]
 });
 
 var picker3 = new WheelPicker({
-	el: "#demo3",
-	hideOnBackdrop: true,
-	data: [["水果", "蔬菜"], frutiData],
-	onChange: function(value, index){
-		console.log("onChange", value, index);
+    el: "#demo3",
+    hideOnBackdrop: true,
+    hiddenInput: true,
+    data: [
+        ["水果", "蔬菜"],
+        vegetableData
+    ],
+    onChange: function(selected, index) {
+        console.log("onChange", selected, index);
 
-		if (index === 0) {
-			this.setData(value[index] == "水果" ? frutiData : vegetableData, 1);
-		}
-	},
-	onSelect: function(value){
-		console.log("onSelect", value);
-	},
-	onShow: function(){
-		console.log("onShow");
-	},
-	onCancel: function(){
-		console.log("onCancel");
-	},
-	parseValue: function(value) {
-		return value[0] + "：" + value[1];
-	}
+        if (index === 0) {
+            this.setData(selected[index].value == "水果" ? frutiData : vegetableData, 1);
+        }
+    },
+    onSelect: function(selected) {
+        console.log("onSelect", selected);
+    },
+    onShow: function() {
+        console.log("onShow");
+    },
+    onCancel: function() {
+        console.log("onCancel");
+    },
+    formatValue: function(value) {
+        return value[0] + "：" + value[1];
+    }
 });
 </script>
 
