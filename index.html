@@ -35,7 +35,7 @@
     <p><input type="text" id="demo2"></p>
 
     <h3><label for="demo3">联动</label></h3>
-    <p><input type="text" id="demo3" placeholder="点击选择"></p>
+    <p><input type="text" id="demo3" placeholder="点击选择" value="蔬菜 tomato"></p>
 
 <h2>
 <a id="安装" class="anchor" href="#%E5%AE%89%E8%A3%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装</h2>
@@ -60,8 +60,8 @@
 <span class="pl-k">var</span> picker1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">WheelPicker</span>({
     title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>最爱的水果<span class="pl-pds">"</span></span>,
     data<span class="pl-k">:</span> [frutis],
-    <span class="pl-en">onSelect</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">value</span>) {
-        <span class="pl-en">alert</span>(<span class="pl-s"><span class="pl-pds">"</span>你选择的是：<span class="pl-pds">"</span></span> <span class="pl-k">+</span>  value[<span class="pl-c1">0</span>]);
+    <span class="pl-en">onSelect</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">selected</span>) {
+        <span class="pl-en">alert</span>(<span class="pl-s"><span class="pl-pds">"</span>你选择的是：<span class="pl-pds">"</span></span> <span class="pl-k">+</span>  selected[<span class="pl-c1">0</span>].<span class="pl-c1">text</span>);
     }
 });
 
@@ -70,7 +70,7 @@
     el<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>#demo<span class="pl-pds">"</span></span>,
     data<span class="pl-k">:</span> [frutis, vegetables],
     value<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">"</span>柠檬<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>potato<span class="pl-pds">"</span></span>],
-    <span class="pl-en">parseValue</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">value</span>) {
+    <span class="pl-en">formatValue</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">value</span>) {
         <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>你选择的分别是：<span class="pl-pds">"</span></span> <span class="pl-k">+</span>  <span class="pl-smi">value</span>.<span class="pl-c1">join</span>(<span class="pl-s"><span class="pl-pds">"</span>、<span class="pl-pds">"</span></span>);
     }
 });</pre></div>
@@ -99,6 +99,12 @@
 <td>element</td>
 <td>null</td>
 <td>选择器对应的 input 元素</td>
+</tr>
+<tr>
+<td>hiddenInput</td>
+<td>boolean</td>
+<td>false</td>
+<td>将 el.type 设置为 hidden 并用于保存 value 值；再 clone 一个 el 元素用于显示 text 值</td>
 </tr>
 <tr>
 <td>hideOnBackdrop</td>
@@ -131,10 +137,22 @@
 <td>行高</td>
 </tr>
 <tr>
+<td>formatValue</td>
+<td>function</td>
+<td><code>val =&gt; val.split(" ")</code></td>
+<td>从 el 元素获取默认值</td>
+</tr>
+<tr>
 <td>parseValue</td>
 <td>function</td>
 <td><code>val =&gt; val.join(" ")</code></td>
 <td>保存时填充到 el 元素的值</td>
+</tr>
+<tr>
+<td>parseHiddenValue</td>
+<td>function</td>
+<td><code>val =&gt; val.join(" ")</code></td>
+<td>保存时填充到 el 的值（如果 hiddenInput 为 true）</td>
 </tr>
 <tr>
 <td>onRender</td>
@@ -152,13 +170,13 @@
 <td>onChange</td>
 <td>function</td>
 <td>null</td>
-<td>滚动导致值变化时触发，参数为值数组和发生变化的列的索引值</td>
+<td>滚动导致值变化时触发，参数为条目数组和发生变化的列的索引值</td>
 </tr>
 <tr>
 <td>onSelect</td>
 <td>function</td>
 <td>null</td>
-<td>点击确定时触发，参数为值数组</td>
+<td>点击确定时触发，参数为条目数组</td>
 </tr>
 <tr>
 <td>onCancel</td>
@@ -184,6 +202,11 @@
 <a id="pickersetvalvaluestring-indexnumber" class="anchor" href="#pickersetvalvaluestring-indexnumber" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.setVal(value:string, index:number)</h3>
 
 <p>设置各列的值或指定列的值</p>
+
+<h3>
+<a id="pickergetselecteditems" class="anchor" href="#pickergetselecteditems" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.getSelectedItems()</h3>
+
+<p>返回选中的条目数组</p>
 
 <h3>
 <a id="pickergetdataindexnubmer" class="anchor" href="#pickergetdataindexnubmer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>picker.getData([index:nubmer])</h3>
@@ -238,63 +261,64 @@
 
 <script src="wheelpicker.min.js"></script>
 <script>
-var frutis = "西瓜,柠檬,草莓,荔枝,橘子,菠萝,香蕉,柚子,苹果,龙眼,蓝莓,樱桃,椰子,杨梅".split(",");
-var frutiData = frutis.map(function(fruit){
-  return {
-    text: fruit,
-    value: fruit
-  };
+var frutis = "西瓜,柠檬,草莓,荔枝,橘子,菠萝,香蕉,柚子,苹果,龙眼".split(",");
+var frutisEn = "watermelon,lemon,strawberry,litchi,orange,pineapple,banana,grapefruit,apple,longan".split(",");
+var frutiData = frutis.map(function(name, idx) {
+    return {
+        text: name,
+        value: frutisEn[idx]
+    };
 });
-var vegetables = "香菜,青菜,芦笋,萝卜,水芹,黄瓜,冬瓜,番茄,茄子,土豆,蘑菇,木耳,紫菜,海带".split(",");
-var vegetableData = vegetables.map(function(vegetable){
-  return {
-    text: vegetable,
-    value: vegetable
-  };
+var vegetables = "香菜,青菜,芦笋,萝卜,水芹,黄瓜,冬瓜,番茄,茄子,土豆".split(",");
+var vegetablesEn = "parsley,celery,asparagus,carrot,celery,cucumber,melon,tomato,eggplant,potato".split(",");
+var vegetableData = vegetables.map(function(name, idx) {
+    return {
+        text: name,
+        value: vegetablesEn[idx]
+    };
 });
-
 var picker1 = new WheelPicker({
-  title: "单列选择器",
-  data: [frutis],
-  onSelect: function(value){
-    alert(value);
-  }
-});
-
-document.getElementById("demo1").onclick = function(){
-  picker1.show();
-  return false;
-};
-
-var picker2 = new WheelPicker({
-  el: "#demo2",
-  value: ["柠檬", "萝卜"],
-  data: [frutiData, vegetableData]
-});
-
-var picker3 = new WheelPicker({
-  el: "#demo3",
-  hideOnBackdrop: true,
-  data: [["水果", "蔬菜"], frutiData],
-  onChange: function(value, index){
-    console.log("onChange", value, index);
-
-    if (index === 0) {
-      this.setData(value[index] == "水果" ? frutiData : vegetableData, 1);
+    title: "单列选择器",
+    data: [frutis],
+    onSelect: function(selected) {
+        alert(selected[0].value);
     }
-  },
-  onSelect: function(value){
-    console.log("onSelect", value);
-  },
-  onShow: function(){
-    console.log("onShow");
-  },
-  onCancel: function(){
-    console.log("onCancel");
-  },
-  parseValue: function(value) {
-    return value[0] + "：" + value[1];
-  }
+});
+document.getElementById("demo1").onclick = function() {
+    picker1.show();
+    return false;
+};
+var picker2 = new WheelPicker({
+    el: "#demo2",
+    data: [frutiData, vegetableData],
+    value: ["lemon", "carrot"]
+});
+var picker3 = new WheelPicker({
+    el: "#demo3",
+    hideOnBackdrop: true,
+    hiddenInput: true,
+    data: [
+        ["水果", "蔬菜"],
+        vegetableData
+    ],
+    onChange: function(selected, index) {
+        console.log("onChange", selected, index);
+        if (index === 0) {
+            this.setData(selected[index].value == "水果" ? frutiData : vegetableData, 1);
+        }
+    },
+    onSelect: function(selected) {
+        console.log("onSelect", selected);
+    },
+    onShow: function() {
+        console.log("onShow");
+    },
+    onCancel: function() {
+        console.log("onCancel");
+    },
+    formatValue: function(value) {
+        return value[0] + "：" + value[1];
+    }
 });
 </script>
 
