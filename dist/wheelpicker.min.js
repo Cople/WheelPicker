@@ -1,5 +1,5 @@
 /*!
- * WheelPicker v1.0.5
+ * WheelPicker v1.0.6
  * https://cople.github.io/WheelPicker
  * Licensed under the MIT License
  */
