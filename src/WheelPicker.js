@@ -98,7 +98,12 @@ WheelPicker.prototype = {
     },
 
     _bindEvents: function() {
-        if (this.control) this.control.addEventListener("focus", this.show.bind(this));
+        this._onFocus = function(event) {
+            event.target.blur();
+            this.show();
+        }.bind(this);
+
+        if (this.control) this.control.addEventListener("focus", this._onFocus);
         if (this.options.hideOnBackdrop) this.container.querySelector(".wheelpicker-backdrop").addEventListener("click", this._cancel.bind(this));
 
         this.container.querySelector(".wheelpicker-actions .btn-cancel").addEventListener("click", this._cancel.bind(this));
@@ -208,7 +213,7 @@ WheelPicker.prototype = {
     },
 
     getData: function(index) {
-        if (typeof index == "number") {
+        if (typeof index === "number") {
             return this.wheels[index].getData();
         } else {
             return this.wheels.map(function(wheel) {
@@ -221,7 +226,7 @@ WheelPicker.prototype = {
         if (this.disabled) return;
         this.changed = true;
 
-        if (typeof index == "number") {
+        if (typeof index === "number") {
             this.wheels[index].setData(data, value);
         } else {
             if (utils.isArray(index)) value = index;
@@ -252,6 +257,8 @@ WheelPicker.prototype = {
             this.hiddenInput.type = this.elType;
             this.hiddenInput.classList.remove("wheelpicker-hiddeninput");
         } else if (this.control) {
+            this.control.readOnly = false;
+            this.control.removeEventListener("focus", this._onFocus);
             this.control.classList.remove("wheelpicker-control");
         }
     }

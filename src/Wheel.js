@@ -118,7 +118,7 @@ Wheel.prototype = {
         if (y > 0) y = 0;
         if (y < this.maxScrollY) y = this.maxScrollY;
 
-        if (y == this.y) return false;
+        if (y === this.y) return false;
 
         this._scrollTo(y, duration, this.easings.bounce);
 
