@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <link rel="stylesheet" type="text/css" href="wheelpicker.min.css" media="screen">
+    <style>#wheelpicker-demo3 .wheelpicker-wheel { width: 33.3%; }</style>
   </head>
   <body>
     <section class="page-header">
@@ -34,8 +35,8 @@
     <h3><label for="demo2">两列带默认值</label></h3>
     <p><input type="text" id="demo2"></p>
 
-    <h3><label for="demo3">联动</label></h3>
-    <p><input type="text" id="demo3" placeholder="点击选择" value="蔬菜 tomato"></p>
+    <h3><label for="demo3">城市联动</label></h3>
+    <p><input type="text" id="demo3" placeholder="点击选择"></p>
 
 <h2>
 <a id="安装" class="anchor" href="#%E5%AE%89%E8%A3%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装</h2>
@@ -259,6 +260,7 @@
 
     </section>
 
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=fetch"></script>
 <script src="wheelpicker.min.js"></script>
 <script>
 var frutis = "西瓜,柠檬,草莓,荔枝,橘子,菠萝,香蕉,柚子,苹果,龙眼".split(",");
@@ -293,33 +295,49 @@ var picker2 = new WheelPicker({
     data: [frutiData, vegetableData],
     value: ["lemon", "carrot"]
 });
-var picker3 = new WheelPicker({
-    el: "#demo3",
-    hideOnBackdrop: true,
-    hiddenInput: true,
-    data: [
-        ["水果", "蔬菜"],
-        vegetableData
-    ],
-    onChange: function(selected, index) {
-        console.log("onChange", selected, index);
-        if (index === 0) {
-            this.setData(selected[index].value == "水果" ? frutiData : vegetableData, 1);
-        }
-    },
-    onSelect: function(selected) {
-        console.log("onSelect", selected);
-    },
-    onShow: function() {
-        console.log("onShow");
-    },
-    onCancel: function() {
-        console.log("onCancel");
-    },
-    formatValue: function(value) {
-        return value[0] + "：" + value[1];
-    }
-});
+fetch("https://cdn.jsdelivr.net/gh/modood/Administrative-divisions-of-China/dist/pca.json")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        var defaultProv = Object.keys(data)[0];
+
+        var picker3 = new WheelPicker({
+            el: "#demo3",
+            hideOnBackdrop: true,
+            hiddenInput: true,
+            data: [
+                Object.keys(data),
+                Object.keys(data[defaultProv]),
+                data[defaultProv][Object.keys(data[defaultProv])[0]]
+            ],
+            onChange: function(index, selected) {
+                console.log("onChange", index, selected);
+
+                if (index === 0) {
+                    var cityObj = data[selected.value];
+                    var cities = cityObj ? Object.keys(cityObj) : [];
+                    this.setData(cities, 1);
+                    this.setData(cities.length ? cityObj[cities[0]] : [], 2);
+                } else if (index === 1) {
+                    var prov = this.getSelectedItems()[0];
+                    this.setData(data[prov.value][selected.value], 2);
+                }
+            },
+            onSelect: function(selected) {
+                console.log("onSelect", selected);
+            },
+            onShow: function() {
+                console.log("onShow");
+            },
+            onCancel: function() {
+                console.log("onCancel");
+            },
+            formatValue: function(value) {
+                return value.join(" ");
+            }
+        });
+    });
 </script>
 
 <script>
