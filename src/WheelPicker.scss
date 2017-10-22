@@ -76,6 +76,9 @@
         cursor: pointer;
         line-height: 34px;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     &-item-disabled {
         cursor: default;

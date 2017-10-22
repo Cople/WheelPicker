@@ -41,6 +41,8 @@ function WheelPicker(options) {
             el.classList.add("wheelpicker-control");
             this.control = el;
         }
+
+        this.origEl = el;
     }
 
     this.value = [];
@@ -66,7 +68,7 @@ WheelPicker.prototype = {
     _init: function() {
         var defaultValue = this.options.value || (this.control && this.control.value ? this.options.parseValue(this.control.value) : null);
 
-        this._createDom();
+        this._createDOM();
 
         for (var i = 0, len = this.options.data.length; i < len; i++) {
             this.wheels.push(new Wheel(this.wheelsContainer, {
@@ -85,10 +87,10 @@ WheelPicker.prototype = {
         if (defaultValue) this._set(true);
     },
 
-    _createDom: function() {
+    _createDOM: function() {
         this.container = document.createElement("div");
         this.container.className = "wheelpicker";
-        if (this.options.id) this.container.id = "wheelpicker-" + this.options.id;
+        if (this.origEl) this.container.id = "wheelpicker-" + (this.origEl.name || this.origEl.id);
         this.container.innerHTML = "<div class='wheelpicker-backdrop'></div><div class='wheelpicker-panel'><div class='wheelpicker-actions'><button type='button' class='btn-cancel'>取消</button><button type='button' class='btn-set'>确定</button><h4 class='wheelpicker-title'></h4></div><div class='wheelpicker-main'><div class='wheelpicker-wheels'></div><div class='wheelpicker-mask wheelpicker-mask-top'></div><div class='wheelpicker-mask wheelpicker-mask-current'></div><div class='wheelpicker-mask wheelpicker-mask-btm'></div></div></div>";
         this.wheelsContainer = this.container.querySelector(".wheelpicker-wheels");
 
@@ -113,7 +115,7 @@ WheelPicker.prototype = {
     },
 
     _onChange: function(index) {
-        if (this.options.onChange) this.options.onChange.call(this, this.getSelectedItems(), index);
+        if (this.options.onChange) this.options.onChange.call(this, index, this.getSelectedItems()[index]);
     },
 
     _backdropTransEnd: function() {
@@ -135,11 +137,11 @@ WheelPicker.prototype = {
         this.value = this.getValue();
         if (this.control && !this.cancelled) {
             this.control.value = this.options.formatValue(selectedItems.map(function(item) {
-                return item.text;
+                return item ? item.text : null;
             }));
             if (this.hiddenInput) {
                 this.hiddenInput.value = this.options.formatHiddenValue(selectedItems.map(function(item) {
-                    return item.value;
+                    return item ? item.value : null;
                 }));
             }
         }

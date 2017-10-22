@@ -8,8 +8,15 @@
 
 ## 安装
 
+### NPM
 ```sh
 npm install wheel-picker --save
+```
+
+### CDN
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wheel-picker/dist/wheelpicker.min.css">
+<script src="https://cdn.jsdelivr.net/npm/wheel-picker/dist/wheelpicker.min.js"></script>
 ```
 
 ## 使用
@@ -48,24 +55,24 @@ var picker2 = new WheelPicker({
 
 ## 选项
 
-| 参数 | 类型 | 默认值 | 描述 |
-|-----|-----|-------|-------|
-| title | string | null | 标题 |
-| el | element | null | 选择器对应的 input 元素 |
-| hiddenInput | boolean | false | 将 el.type 设置为 hidden 并用于保存 value 值；再 clone 一个 el 元素用于显示 text 值 |
-| hideOnBackdrop | boolean | false | 点击遮罩层关闭组件（相当于点击取消按钮） |
-| data | array | [] | 每列的数据组成的数组 |
-| value | array | [] | 每列的默认值组成的数组 |
-| rows | number | 5 | 可见的行数（奇数） |
-| rowHeight | number | 34 | 行高 |
-| formatValue | function | `val => val.split(" ")` | 从 el 元素获取默认值 |
-| parseValue | function | `val => val.join(" ")` | 保存时填充到 el 或 cloneNode 的值 |
-| parseHiddenValue | function | `val => val.join(" ")` | 保存时填充到 el 的值（如果 hiddenInput 为 true） |
-| onRender | function | null | 生成组件 DOM 时触发，参数为组件元素 |
-| onShow | function | null | 显示组件时触发 |
-| onChange | function | null | 滚动导致值变化时触发，参数为条目数组和发生变化的列的索引值 |
-| onSelect | function | null | 点击确定时触发，参数为条目数组 |
-| onCancel | function | null | 点击取消时触发 |
+| 参数               | 类型       | 默认值                     | 描述                                       |
+| ---------------- | -------- | ----------------------- | ---------------------------------------- |
+| title            | string   | null                    | 标题                                       |
+| el               | element  | null                    | 选择器对应的 input 元素                          |
+| hiddenInput      | boolean  | false                   | 将 el.type 设置为 hidden 并用于保存 value 值；再 clone 一个 el 元素用于显示 text 值 |
+| hideOnBackdrop   | boolean  | false                   | 点击遮罩层关闭组件（相当于点击取消按钮）                     |
+| data             | array    | []                      | 每列的数据组成的数组                               |
+| value            | array    | []                      | 每列的默认值组成的数组                              |
+| rows             | number   | 5                       | 可见的行数（奇数）                                |
+| rowHeight        | number   | 34                      | 行高                                       |
+| formatValue      | function | `val => val.split(" ")` | 从 el 元素获取默认值                             |
+| parseValue       | function | `val => val.join(" ")`  | 保存时填充到 el 或 cloneNode 的值                 |
+| parseHiddenValue | function | `val => val.join(" ")`  | 保存时填充到 el 的值（如果 hiddenInput 为 true）      |
+| onRender         | function | null                    | 生成组件 DOM 时触发，参数为组件元素                     |
+| onShow           | function | null                    | 显示组件时触发                                  |
+| onChange         | function | null                    | 滚动导致值变化时触发，参数为发生变化的列的索引值和选中项             |
+| onSelect         | function | null                    | 点击确定时触发，参数为条目数组                          |
+| onCancel         | function | null                    | 点击取消时触发                                  |
 
 ## 方法
 ### picker.getValue([index:number])

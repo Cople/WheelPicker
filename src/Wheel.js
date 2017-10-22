@@ -59,11 +59,11 @@ function Wheel(el, options) {
 
 Wheel.prototype = {
     _init: function() {
-        this._createDom();
+        this._createDOM();
         this._bindEvents();
     },
 
-    _createDom: function() {
+    _createDOM: function() {
         this.wheel = document.createElement("div");
         this.wheel.className = "wheelpicker-wheel";
 
@@ -179,6 +179,8 @@ Wheel.prototype = {
     _start: function(event) {
         event.preventDefault();
 
+        if (!this.data.length) return;
+
         if (this.isTransition) {
             this.isTransition = false;
             this.y = this._getCurrentY();
@@ -220,6 +222,8 @@ Wheel.prototype = {
     },
 
     _end: function(event) {
+        if (!this.isTouching) return false;
+
         var deltaTime = Date.now() - this.startTime;
         var duration = this.options.adjustTime;
         var easing = this.easings.scroll;
@@ -271,7 +275,7 @@ Wheel.prototype = {
     },
 
     setData: function(data, value) {
-        var defaultValue = value || data[0].value || data[0];
+        var defaultValue = value || (data && data.length ? (data[0].value || data[0]) : null);
 
         this.items = [];
         this.scroller.innerHTML = "";
@@ -310,7 +314,8 @@ Wheel.prototype = {
     },
 
     getValue: function() {
-        return this.getSelectedItem().value;
+        var selected = this.getSelectedItem();
+        return selected ? selected.value : null;
     },
 
     setValue: function(value, noAnimation) {
