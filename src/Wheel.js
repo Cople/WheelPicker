@@ -215,7 +215,7 @@ Wheel.prototype = {
 
         if (now - this.startTime > this.momentumThresholdTime) {
             this.startTime = now;
-            this.startY = y;
+            this.startY = this.y;
         }
 
         return false;
