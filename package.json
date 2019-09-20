@@ -27,6 +27,7 @@
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "gulp": "4.0.2",
-    "webpack-stream": "5.2.1"
+    "webpack-stream": "5.2.1",
+    "live-server": "latest"
   }
 }
