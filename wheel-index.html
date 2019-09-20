@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>WheelPicker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- <link rel="stylesheet" href="./dist/wheel.min.css"> -->
+    <style>
+        body {
+            font-size: 14px;
+        }
+
+        .wheelpicker-item-selected {
+            color: brown;
+            font-size: 18px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        .wheelpicker-main {
+            position: relative;
+            width: inherit;
+            background: inherit;
+        }
+
+
+        .wheelpicker-wheel {
+            -ms-flex: 1 auto;
+            flex: 1 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wheelpicker-wheel-scroller {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wheelpicker-item {
+            cursor: pointer;
+            height: 34px;
+            line-height: 34px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .wheelpicker-item-disabled {
+            cursor: default;
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .wheelpicker-item-selected {
+            cursor: default;
+        }
+
+        .wheelpicker-mask {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            transform: translateZ(0);
+        }
+
+        .wheelpicker-mask-top {
+            top: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, #FFF, rgba(255, 255, 255, 0.5) 75%);
+        }
+
+        .wheelpicker-mask-btm {
+            bottom: 0;
+            height: 50%;
+            background: linear-gradient(to top, #FFF, rgba(255, 255, 255, 0.5) 75%);
+        }
+
+        .wheelpicker-mask-current {
+            height: 34px;
+            top: 50%;
+            margin-top: -18px;
+            border-top: 1px solid #C6C6C6;
+            border-bottom: 1px solid #C6C6C6;
+        }
+
+        .wheelpicker.shown .wheelpicker-backdrop {
+            opacity: 1;
+        }
+
+        .wheelpicker.shown .wheelpicker-panel {
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form class="pure-form">
+        <h1 data-feidao-id="show" style="font-size: 12px">WheelPicker</h1>
+        <p data-feidao-id="setValue">仿 iOS UIPickerView 的滚动选择器</p>
+
+        <div class='wheelpicker-main'>
+            <div class='wheelpicker-wheels'></div>
+            <div class='wheelpicker-mask wheelpicker-mask-top'></div>
+            <div class='wheelpicker-mask wheelpicker-mask-current'></div>
+            <div class='wheelpicker-mask wheelpicker-mask-btm'></div>
+        </div>
+    </form>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=fetch"></script>
+    <script src="./dist/wheel.min.js"></script>
+    <script>
+        const show = document.querySelector('[data-feidao-id="show"]');
+        const wheelsContainer = document.querySelector('.wheelpicker-wheels');
+        const btm = document.querySelector('.wheelpicker-mask-btm');
+        const masktop = document.querySelector('.wheelpicker-mask-top');
+
+        const setValue = document.querySelector('[data-feidao-id="setValue"]');
+
+        var selectedIndex = 0;
+        const data = [
+            {
+                text: "西瓜",
+                value: "watermelon"
+            },
+            {
+                text: "柠檬",
+                value: "lemon"
+            },
+            {
+                text: "草莓",
+                value: "strawberry"
+            },
+            {
+                text: "荔枝",
+                value: "litchi"
+            },
+            {
+                text: "橘子",
+                value: "orange"
+            },
+            {
+                text: "菠萝",
+                value: "pineapple"
+            },
+            {
+                text: "香蕉",
+                value: "banana"
+            },
+            {
+                text: "柚子",
+                value: "grapefruit"
+            },
+            {
+                text: "苹果",
+                value: "apple"
+            },
+            {
+                text: "龙眼",
+                value: "longan"
+            }
+        ];
+        const options = {
+            rows: 6,
+            rowHeight: 34,
+            data,
+            value: data[selectedIndex].value,
+            onSelect: function (selected) {
+                show.innerHTML = JSON.stringify(selected);
+                selectedIndex = picker.selectedIndex;
+                console.log(selected.value, picker.selectedIndex)
+            },
+        };
+
+        masktop.style.height = btm.style.height = options.rowHeight * Math.floor(options.rows / 2) - 1 + "px";
+
+        const picker = new Wheel(wheelsContainer, options)
+
+        setValue.addEventListener('click', () => {
+            const index = selectedIndex + 3 > data.length ? data.length - 1 : selectedIndex + 3
+            picker.setValue(data[index].value);
+            console.log(picker.selectedIndex)
+        })
+
+    </script>
+
+</body>
+
+</html>

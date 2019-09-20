@@ -8,8 +8,8 @@
     "滚动选择"
   ],
   "scripts": {
-    "build": "webpack --optimize-minimize",
-    "dev": "webpack --progress --colors --watch"
+    "build": "gulp",
+    "dev": "gulp && gulp watch & live-server"
   },
   "author": "Cople",
   "license": "MIT",
@@ -25,6 +25,8 @@
     "postcss-loader": "^0.9.1",
     "sass-loader": "^3.2.3",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "gulp": "4.0.2",
+    "webpack-stream": "5.2.1"
   }
 }
