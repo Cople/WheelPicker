@@ -1,6 +1,6 @@
 {
   "name": "@feidao-msz/wheel-picker",
-  "version": "0.0.1",
+  "version": "1.0.201910161500",
   "description": "仿 iOS UIPickerView 的滚动选择器",
   "main": "dist/wheelpicker.min.js",
   "keywords": [
