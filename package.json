@@ -1,6 +1,6 @@
 {
-  "name": "wheel-picker",
-  "version": "1.1.0",
+  "name": "@feidao-msz/wheel-picker",
+  "version": "1.0.201910161500",
   "description": "仿 iOS UIPickerView 的滚动选择器",
   "main": "dist/wheelpicker.min.js",
   "keywords": [
@@ -8,8 +8,8 @@
     "滚动选择"
   ],
   "scripts": {
-    "build": "webpack --optimize-minimize",
-    "dev": "webpack --progress --colors --watch"
+    "build": "gulp",
+    "dev": "gulp && gulp watch & live-server"
   },
   "author": "Cople",
   "license": "MIT",
@@ -25,6 +25,9 @@
     "postcss-loader": "^0.9.1",
     "sass-loader": "^3.2.3",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "gulp": "4.0.2",
+    "webpack-stream": "5.2.1",
+    "live-server": "latest"
   }
 }
